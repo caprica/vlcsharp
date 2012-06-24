@@ -9,8 +9,8 @@ You get more than just simple bindings, you also get a higher level framework
 that hides a lot of the complexities of working with libvlc.
 
 The aim of this project is to port the existing [vlcj](http://caprica.github.com/vlcj "vlcj at github")
-to platform independent C#, implementing as many vlcj features as possible, and 
-supporting as many platforms as possible.
+project to platform independent C#, implementing as many vlcj features as possible, 
+and  supporting as many platforms as possible.
 
 Since this project is, initially at least, a straight port from vlcj there may
 be some inherent Java-esque traits in the implementation rather than a best-practices
