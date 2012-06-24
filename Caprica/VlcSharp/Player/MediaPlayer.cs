@@ -341,7 +341,7 @@ namespace Caprica.VlcSharp.Player {
          * 
          * @return sub-item list, or <code>null</code> if there is no current media
          */
-        List<String> SubItems();
+        List<string> SubItems();
     
         /**
          * Get the list of sub-item media instances (if any).
