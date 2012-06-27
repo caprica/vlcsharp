@@ -86,8 +86,8 @@ namespace Caprica.VlcSharp.MediaList {
          * 
          * @return sub-items
          */
-        public List<MediaListItem> SubItems() {
-    		return new ReadOnlyCollection<MediaListItem>(subItems);
+        public ReadOnlyCollection<MediaListItem> SubItems() {
+            return new ReadOnlyCollection<MediaListItem>(subItems);
         }
     
         public override string ToString() {
