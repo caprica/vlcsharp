@@ -29,7 +29,7 @@ namespace Caprica.VlcSharp.Player.Embedded.VideoSurface.Linux {
     public partial class LinuxVideoSurfaceAdapter : VideoSurfaceAdapter {
     
         public void Attach(DefaultMediaPlayer mediaPlayer, long componentId) {
-            LibVlcInternal.libvlc_media_player_set_xwindow(mediaPlayer.MediaPlayerInstance(), (int)componentId);
+            LibVlc.libvlc_media_player_set_xwindow(mediaPlayer.MediaPlayerInstance(), (int)componentId);
         }
     }
 }

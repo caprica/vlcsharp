@@ -29,7 +29,7 @@ namespace Caprica.VlcSharp.Player.Embedded.VideoSurface.Mac {
     public partial class MacVideoSurfaceAdapter : VideoSurfaceAdapter {
 
         public void Attach(DefaultMediaPlayer mediaPlayer, long componentId) {
-            LibVlcInternal.libvlc_media_player_set_nsobject(mediaPlayer.MediaPlayerInstance(), (int)componentId);
+            LibVlc.libvlc_media_player_set_nsobject(mediaPlayer.MediaPlayerInstance(), (int)componentId);
         }
     }
 }

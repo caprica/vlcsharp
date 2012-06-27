@@ -28,7 +28,7 @@ namespace Caprica.VlcSharp.Player.Embedded.VideoSurface.Windows {
     public class WindowsVideoSurfaceAdapter : VideoSurfaceAdapter {
      
         public void Attach(DefaultMediaPlayer mediaPlayer, long componentId) {
-            LibVlcInternal.libvlc_media_player_set_hwnd(mediaPlayer.MediaPlayerInstance(), (int)componentId);
+            LibVlc.libvlc_media_player_set_hwnd(mediaPlayer.MediaPlayerInstance(), (int)componentId);
         }
     }
 }
