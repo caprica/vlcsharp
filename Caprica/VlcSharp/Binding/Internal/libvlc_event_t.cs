@@ -107,6 +107,10 @@ namespace Caprica.VlcSharp.Binding.Internal {
         // media_list_will_delete_item
 
         // FIXME hmmmmm....
+
+        // media_list_player_next_item_set
+        [FieldOffset(0)]
+        public IntPtr item;
     }
 
     [StructLayout(LayoutKind.Sequential)]
