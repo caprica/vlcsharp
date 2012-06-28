@@ -48,7 +48,7 @@ namespace Caprica.VlcSharp.MediaList.Events {
          * @param event native event
          * @return media list event, or <code>null</code> if the native event type is not enabled or otherwise could not be handled
          */
-        public MediaListEvent createEvent(libvlc_event_t evt) {
+        public MediaListEvent CreateEvent(libvlc_event_t evt) {
             // Create an event suitable for the native event type...
             MediaListEvent result = null;
             switch(evt.type) {
