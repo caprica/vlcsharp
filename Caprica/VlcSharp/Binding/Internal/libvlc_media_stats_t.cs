@@ -19,6 +19,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Caprica.VlcSharp.Binding.Internal {
 
@@ -54,5 +55,26 @@ namespace Caprica.VlcSharp.Binding.Internal {
         public int         i_sent_packets;
         public int         i_sent_bytes;
         public float       f_send_bitrate;
+
+        public override string ToString() {
+            StringBuilder sb = new StringBuilder(200);
+            sb.Append("Stats:").Append('[');
+            sb.Append("i_read_bytes=").Append(i_read_bytes).Append(',');
+            sb.Append("f_input_bitrate=").Append(f_input_bitrate).Append(',');
+            sb.Append("i_demux_read_bytes=").Append(i_demux_read_bytes).Append(',');
+            sb.Append("f_demux_bitrate=").Append(f_demux_bitrate).Append(',');
+            sb.Append("i_demux_corrupted=").Append(i_demux_corrupted).Append(',');
+            sb.Append("i_demux_discontinuity=").Append(i_demux_discontinuity).Append(',');
+            sb.Append("i_decoded_video=").Append(i_decoded_video).Append(',');
+            sb.Append("i_decoded_audio=").Append(i_decoded_audio).Append(',');
+            sb.Append("i_displayed_pictures=").Append(i_displayed_pictures).Append(',');
+            sb.Append("i_lost_pictures=").Append(i_lost_pictures).Append(',');
+            sb.Append("i_played_abuffers=").Append(i_played_abuffers).Append(',');
+            sb.Append("i_lost_abuffers=").Append(i_lost_abuffers).Append(',');
+            sb.Append("i_sent_packets=").Append(i_sent_packets).Append(',');
+            sb.Append("i_sent_bytes=").Append(i_sent_bytes).Append(',');
+            sb.Append("f_send_bitrate=").Append(f_send_bitrate).Append(']');
+            return sb.ToString();
+        }
     }
 }
