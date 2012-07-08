@@ -309,7 +309,7 @@ namespace Caprica.VlcSharp.Player {
         }
         
         public bool PlaySubItem(int index, params string[] mediaOptions) {
-        //        Logger.Debug("PlaySubItem(index={},mediaOptions={})", index, Arrays.toString(mediaOptions));
+//        Logger.Debug("PlaySubItem(index={},mediaOptions={})", index, Arrays.toString(mediaOptions));
         /*        return handleSubItems(new SubItemsHandler<bool>() {
                 public bool subItems(int count, libvlc_media_list_t subItems) {
                     if(subItems != null) {
@@ -887,71 +887,29 @@ namespace Caprica.VlcSharp.Player {
         }
         
         // === Description Controls =================================================
-        
-        // FIXME lot of common code here. vlcj also
 
         public List<TrackDescription> GetTitleDescriptions() {
             Logger.Debug("GetTitleDescriptions()");
-            List<TrackDescription> trackDescriptionList = new List<TrackDescription>();
             IntPtr trackDescriptionsPointer = LibVlc.libvlc_video_get_title_description(mediaPlayerInstance);
-            IntPtr trackDescriptionPointer = trackDescriptionsPointer;
-            while(trackDescriptionPointer != IntPtr.Zero) {
-                libvlc_track_description_t trackDescription = (libvlc_track_description_t)Marshal.PtrToStructure(trackDescriptionPointer, typeof(libvlc_track_description_t));
-                trackDescriptionList.Add(new TrackDescription(trackDescription.i_id, NativeString.String(trackDescription.psz_name)));
-                trackDescriptionPointer = trackDescription.p_next;
-            }
-            if(trackDescriptionsPointer != IntPtr.Zero) {
-                LibVlc.libvlc_track_description_list_release(trackDescriptionsPointer);
-            }
-            return trackDescriptionList;
+            return GetTrackDescriptions(trackDescriptionsPointer);
         }
         
         public List<TrackDescription> GetVideoDescriptions() {
             Logger.Debug("GetVideoDescriptions()");
-            List<TrackDescription> trackDescriptionList = new List<TrackDescription>();
             IntPtr trackDescriptionsPointer = LibVlc.libvlc_video_get_track_description(mediaPlayerInstance);
-            IntPtr trackDescriptionPointer = trackDescriptionsPointer;
-            while(trackDescriptionPointer != IntPtr.Zero) {
-                libvlc_track_description_t trackDescription = (libvlc_track_description_t)Marshal.PtrToStructure(trackDescriptionPointer, typeof(libvlc_track_description_t));
-                trackDescriptionList.Add(new TrackDescription(trackDescription.i_id, NativeString.String(trackDescription.psz_name)));
-                trackDescriptionPointer = trackDescription.p_next;
-            }
-            if(trackDescriptionsPointer != IntPtr.Zero) {
-                LibVlc.libvlc_track_description_list_release(trackDescriptionsPointer);
-            }
-            return trackDescriptionList;
+            return GetTrackDescriptions(trackDescriptionsPointer);
         }
         
         public List<TrackDescription> GetAudioDescriptions() {
             Logger.Debug("GetAudioDescriptions()");
-            List<TrackDescription> trackDescriptionList = new List<TrackDescription>();
             IntPtr trackDescriptionsPointer = LibVlc.libvlc_audio_get_track_description(mediaPlayerInstance);
-            IntPtr trackDescriptionPointer = trackDescriptionsPointer;
-            while(trackDescriptionPointer != IntPtr.Zero) {
-                libvlc_track_description_t trackDescription = (libvlc_track_description_t)Marshal.PtrToStructure(trackDescriptionPointer, typeof(libvlc_track_description_t));
-                trackDescriptionList.Add(new TrackDescription(trackDescription.i_id, NativeString.String(trackDescription.psz_name)));
-                trackDescriptionPointer = trackDescription.p_next;
-            }
-            if(trackDescriptionsPointer != IntPtr.Zero) {
-                LibVlc.libvlc_track_description_list_release(trackDescriptionsPointer);
-            }
-            return trackDescriptionList;
+            return GetTrackDescriptions(trackDescriptionsPointer);
         }
         
         public List<TrackDescription> GetSpuDescriptions() {
             Logger.Debug("GetSpuDescriptions()");
-            List<TrackDescription> trackDescriptionList = new List<TrackDescription>();
             IntPtr trackDescriptionsPointer = LibVlc.libvlc_video_get_spu_description(mediaPlayerInstance);
-            IntPtr trackDescriptionPointer = trackDescriptionsPointer;
-            while(trackDescriptionPointer != IntPtr.Zero) {
-                libvlc_track_description_t trackDescription = (libvlc_track_description_t)Marshal.PtrToStructure(trackDescriptionPointer, typeof(libvlc_track_description_t));
-                trackDescriptionList.Add(new TrackDescription(trackDescription.i_id, NativeString.String(trackDescription.psz_name)));
-                trackDescriptionPointer = trackDescription.p_next;
-            }
-            if(trackDescriptionsPointer != IntPtr.Zero) {
-                LibVlc.libvlc_track_description_list_release(trackDescriptionsPointer);
-            }
-            return trackDescriptionList;
+            return GetTrackDescriptions(trackDescriptionsPointer);
         }
         
         public List<string> GetChapterDescriptions(int title) {
@@ -1047,7 +1005,28 @@ namespace Caprica.VlcSharp.Player {
             });*/
             return null;
         }
-        
+
+        /**
+         * Get track descriptions.
+         * 
+         * @param trackDescriptions native track descriptions, this pointer will be freed by this method
+         * @return collection of track descriptions
+         */
+        private List<TrackDescription> GetTrackDescriptions(IntPtr trackDescriptionsPointer) {
+            Logger.Debug("GetTrackDescriptions()");
+            List<TrackDescription> trackDescriptionList = new List<TrackDescription>();
+            IntPtr trackDescriptionPointer = trackDescriptionsPointer;
+            while(trackDescriptionPointer != IntPtr.Zero) {
+                libvlc_track_description_t trackDescription = (libvlc_track_description_t)Marshal.PtrToStructure(trackDescriptionPointer, typeof(libvlc_track_description_t));
+                trackDescriptionList.Add(new TrackDescription(trackDescription.i_id, NativeString.String(trackDescription.psz_name)));
+                trackDescriptionPointer = trackDescription.p_next;
+            }
+            if(trackDescriptionsPointer != IntPtr.Zero) {
+                LibVlc.libvlc_track_description_list_release(trackDescriptionsPointer);
+            }
+            return trackDescriptionList;
+        }
+
         // === Snapshot Controls ====================================================
         
         public void SetSnapshotDirectory(string snapshotDirectoryName) {
@@ -1386,9 +1365,9 @@ namespace Caprica.VlcSharp.Player {
             RegisterEventListener();
 
             // The order these handlers execute in is important for proper operation
-        //        eventListenerList.add(new NewMediaEventHandler());
-        //        eventListenerList.add(new RepeatPlayEventHandler());
-        //        eventListenerList.add(new SubItemEventHandler()); FIXME
+            eventListenerList.Add(new NewMediaEventHandler(this));
+            eventListenerList.Add(new RepeatPlayEventHandler(this));
+            eventListenerList.Add(new SubItemEventHandler(this));
         }
         
         private void DestroyInstance() {
@@ -1494,6 +1473,58 @@ namespace Caprica.VlcSharp.Player {
         }
 
         /**
+         * Set new media for the native media player.
+         * <p>
+         * This method cleans up the previous media if there was one before associating new media with
+         * the media player.
+         * 
+         * @param media media
+         * @param mediaOptions zero or more media options
+         */
+        private bool SetMedia(string media, params string[] mediaOptions) {
+            Logger.Debug("SetMedia(media={},mediaOptions={})", media, mediaOptions);
+            // If there is a current media, clean it up
+            if(mediaInstance != IntPtr.Zero) {
+                // Release the media event listener
+                DeregisterMediaEventListener();
+                // Release the native resource
+                LibVlc.libvlc_media_release(mediaInstance);
+                mediaInstance = IntPtr.Zero;
+            }
+            // Reset sub-items
+            subItemIndex = -1;
+            // Create new media...
+            IntPtr mediaPointer = NativeString.StringPointer(media);
+            if(mediaPointer != IntPtr.Zero) {
+                try {
+                    mediaInstance = LibVlc.libvlc_media_new_path(instance, mediaPointer);
+                }
+                finally {
+                    NativeString.Release(mediaPointer);
+                }
+                if(mediaInstance != IntPtr.Zero) {
+                    // Set the standard media options (if any)...
+                    AddMediaOptions(mediaInstance, standardMediaOptions); // FIXME handle return false?
+                    // Set the particular media options (if any)...
+                    AddMediaOptions(mediaInstance, mediaOptions); // FIXME handle return false?
+                    // Attach a listener to the new media
+                    RegisterMediaEventListener();
+                    // Set the new media on the media player
+                    LibVlc.libvlc_media_player_set_media(mediaPlayerInstance, mediaInstance);
+                }
+                else {
+                    Logger.Error("Failed to create native media resource for '{}'", media);
+                }
+                // Prepare a new statistics object to re-use for the new media item
+                libvlcMediaStats = new libvlc_media_stats_t();
+                return mediaInstance != IntPtr.Zero;
+            }
+            else {
+                return false;
+            }
+        }
+        
+        /**
          * A call-back to handle events from the native media player.
          * <p>
          * There are some important implementation details for this callback:
@@ -1576,59 +1607,123 @@ namespace Caprica.VlcSharp.Player {
                 Logger.Trace("runnable exits");
             }
         }
-        
+
+        // FIXME protection level???
+        // FIXME some non ideal stuff here with the enclosing mediaPlayer and the mediaPlayer on the event
+
         /**
-         * Set new media for the native media player.
+         * Event listener implementation that handles a new item being played.
          * <p>
-         * This method cleans up the previous media if there was one before associating new media with
-         * the media player.
-         * 
-         * @param media media
-         * @param mediaOptions zero or more media options
+         * This is not for sub-items.
          */
-        private bool SetMedia(string media, params string[] mediaOptions) {
-            Logger.Debug("SetMedia(media={},mediaOptions={})", media, mediaOptions);
-            // If there is a current media, clean it up
-            if(mediaInstance != IntPtr.Zero) {
-                // Release the media event listener
-                DeregisterMediaEventListener();
-                // Release the native resource
-                LibVlc.libvlc_media_release(mediaInstance);
-                mediaInstance = IntPtr.Zero;
+        private class NewMediaEventHandler : MediaPlayerEventAdapter {
+
+            private readonly DefaultMediaPlayer mediaPlayer;
+
+            public NewMediaEventHandler(DefaultMediaPlayer mediaPlayer) {
+                this.mediaPlayer = mediaPlayer;
             }
-            // Reset sub-items
-            subItemIndex = -1;
-            // Create new media...
-            IntPtr mediaPointer = NativeString.StringPointer(media);
-            if(mediaPointer != IntPtr.Zero) {
-                try {
-                    mediaInstance = LibVlc.libvlc_media_new_path(instance, mediaPointer);
+
+            public override void MediaChanged(MediaPlayer mediaPlayer, IntPtr media, String mrl) {
+                Logger.Debug("MediaChanged(mediaPlayer={},media={},mrl={})", mediaPlayer, media, mrl);
+                // If this is not a sub-item...
+                if(mediaPlayer.SubItemIndex() == -1) {
+                    // Raise a semantic event to announce the media was changed
+                    Logger.Debug("Raising event for new media");
+//                    RaiseEvent(eventFactory.CreateMediaNewEvent(eventMask));
+                    this.mediaPlayer.RaiseEvent(this.mediaPlayer.eventFactory.CreateMediaNewEvent(0));
                 }
-                finally {
-                    NativeString.Release(mediaPointer);
-                }
-                if(mediaInstance != IntPtr.Zero) {
-                    // Set the standard media options (if any)...
-                    AddMediaOptions(mediaInstance, standardMediaOptions); // FIXME handle return false?
-                    // Set the particular media options (if any)...
-                    AddMediaOptions(mediaInstance, mediaOptions); // FIXME handle return false?
-                    // Attach a listener to the new media
-                    RegisterMediaEventListener();
-                    // Set the new media on the media player
-                    LibVlc.libvlc_media_player_set_media(mediaPlayerInstance, mediaInstance);
-                }
-                else {
-                    Logger.Error("Failed to create native media resource for '{}'", media);
-                }
-                // Prepare a new statistics object to re-use for the new media item
-                libvlcMediaStats = new libvlc_media_stats_t();
-                return mediaInstance != IntPtr.Zero;
-            }
-            else {
-                return false;
             }
         }
-        
+
+        /**
+         * Event listener implementation that handles auto-repeat.
+         */
+        private class RepeatPlayEventHandler : MediaPlayerEventAdapter {
+
+            private readonly DefaultMediaPlayer mediaPlayer;
+
+            public RepeatPlayEventHandler(DefaultMediaPlayer mediaPlayer) {
+                this.mediaPlayer = mediaPlayer;
+            }
+
+            public override void Finished(MediaPlayer mediaPlayer) {
+                Logger.Debug("Finished(mediaPlayer={})", mediaPlayer);
+                if(this.mediaPlayer.repeat && this.mediaPlayer.mediaInstance != IntPtr.Zero) {
+                    int subItemCount = mediaPlayer.SubItemCount();
+                    Logger.Debug("subitemCount={}", subItemCount);
+                    if(subItemCount == 0) {
+                        string mrl = NativeString.GetNativeString(LibVlc.libvlc_media_get_mrl(this.mediaPlayer.mediaInstance));
+                        Logger.Debug("auto repeat mrl={}", mrl);
+                        // It is not sufficient to simply call play(), the MRL must explicitly
+                        // be played again - this is the reason why the repeat play might not
+                        // be seamless
+                        mediaPlayer.PlayMedia(mrl);
+                    }
+                    else {
+                        Logger.Debug("Sub-items handling repeat");
+                    }
+                }
+                else {
+                    Logger.Debug("No repeat");
+                }
+            }
+        }
+
+        /**
+         * Event listener implementation that handles media sub-items.
+         * <p>
+         * Some media types when you 'play' them do not actually play any media and instead sub-items
+         * are created and attached to the current media descriptor.
+         * <p>
+         * This event listener responds to the media player "finished" event by getting the current
+         * media from the player and automatically playing the first sub-item (if there is one).
+         * <p>
+         * If there is more than one sub-item, then they will simply be played in order, and repeated
+         * depending on the value of the "repeat" property.
+         */
+        internal class SubItemEventHandler : MediaPlayerEventAdapter {
+
+            private readonly DefaultMediaPlayer mediaPlayer;
+
+            internal SubItemEventHandler(DefaultMediaPlayer mediaPlayer) {
+                this.mediaPlayer = mediaPlayer;
+            }
+
+            public override void Finished(MediaPlayer mediaPlayer) {
+                Logger.Debug("Finished(mediaPlayer={})", mediaPlayer);
+                // If a sub-item being played...
+                if(this.mediaPlayer.subItemIndex != -1) {
+                    // Raise a semantic event to announce the sub-item was finished
+                    Logger.Debug("Raising finished event for sub-item {}", this.mediaPlayer.subItemIndex);
+//                    RaiseEvent(eventFactory.CreateMediaSubItemFinishedEvent(subItemIndex, eventMask));
+                    this.mediaPlayer.RaiseEvent(this.mediaPlayer.eventFactory.CreateMediaSubItemFinishedEvent(this.mediaPlayer.subItemIndex, 0));
+                }
+                // If set to automatically play sub-items...
+                if(this.mediaPlayer.playSubItems) {
+                    // ...play the next sub-item
+                    this.mediaPlayer.PlayNextSubItem();
+                }
+            }
+        }
+
+        /**
+         * Specification for a component that handles media list sub-items.
+         * 
+         * @param <T> desired result type
+         */
+        private interface SubItemsHandler<T> {
+
+            /**
+             * Handle sub-items.
+             * 
+             * @param count number of sub-items in the list, will always be zero or greater
+             * @param subItems sub-item list, may be <code>null</code>
+             * @return result of processing the sub-items
+             */
+            T subItems(int count, IntPtr subItems);
+        }
+
         /**
          * Add native media options.
          * 
@@ -1652,7 +1747,7 @@ namespace Caprica.VlcSharp.Player {
                         }
                     }
                     else {
-                    	return false;
+                        return false;
                     }
                 }
             }

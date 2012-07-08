@@ -224,7 +224,7 @@ namespace Caprica.VlcSharp.Player.Events {
          * @param eventMask bit mask of enabled events (i.e. events to send notifications for)
          * @return media player event, or <code>null</code> if the event type is not enabled
          */
-        public MediaPlayerEvent createMediaNewEvent(int eventMask) {
+        public MediaPlayerEvent CreateMediaNewEvent(int eventMask) {
     //        if(MediaPlayerEventType.set(eventMask, MediaPlayerEventType.NEW_MEDIA)) {
                 return new MediaNewEvent(mediaPlayer);
     //        }
@@ -238,7 +238,7 @@ namespace Caprica.VlcSharp.Player.Events {
          * @param eventMask bit mask of enabled events (i.e. events to send notifications for)
          * @return media player event, or <code>null</code> if the event type is not enabled
          */
-        public MediaPlayerEvent createMediaSubItemPlayedEvent(int subItemIndex, int eventMask) {
+        public MediaPlayerEvent CreateMediaSubItemPlayedEvent(int subItemIndex, int eventMask) {
     //        if(MediaPlayerEventType.set(eventMask, MediaPlayerEventType.SUB_ITEM_PLAYED)) {
                 return new MediaSubItemPlayedEvent(mediaPlayer, subItemIndex);
     //        }
@@ -252,7 +252,7 @@ namespace Caprica.VlcSharp.Player.Events {
          * @param eventMask bit mask of enabled events (i.e. events to send notifications for)
          * @return media player event, or <code>null</code> if the event type is not enabled
          */
-        public MediaPlayerEvent createMediaSubItemFinishedEvent(int subItemIndex, int eventMask) {
+        public MediaPlayerEvent CreateMediaSubItemFinishedEvent(int subItemIndex, int eventMask) {
     //        if(MediaPlayerEventType.set(eventMask, MediaPlayerEventType.SUB_ITEM_FINISHED)) {
                 return new MediaSubItemFinishedEvent(mediaPlayer, subItemIndex);
     //        }
@@ -265,7 +265,7 @@ namespace Caprica.VlcSharp.Player.Events {
          * @param eventMask bit mask of enabled events (i.e. events to send notifications for)
          * @return media player event, or <code>null</code> if the event type is not enabled
          */
-        public MediaPlayerEvent createMediaEndOfSubItemsEvent(int eventMask) {
+        public MediaPlayerEvent RreateMediaEndOfSubItemsEvent(int eventMask) {
     //        if(MediaPlayerEventType.set(eventMask, MediaPlayerEventType.END_OF_SUB_ITEMS)) {
                 return new MediaEndOfSubItemsEvent(mediaPlayer);
     //        }

@@ -232,7 +232,7 @@ namespace Caprica.VlcSharp.Player.List {
     
             RegisterEventListener();
     
-    //	        AddMediaListPlayerEventListener(new NextItemHandler());
+    //        AddMediaListPlayerEventListener(new NextItemHandler());
         }
     
         /**
@@ -294,7 +294,7 @@ namespace Caprica.VlcSharp.Player.List {
             }
         }
     
-    	private void HandleEvent(IntPtr evt, IntPtr data) {
+        private void HandleEvent(IntPtr evt, IntPtr data) {
             if(eventListenerList.Count > 0) {
                 libvlc_event_t e = (libvlc_event_t)Marshal.PtrToStructure(evt, typeof(libvlc_event_t));
                 // Create a new media player event for the native event
@@ -369,7 +369,7 @@ namespace Caprica.VlcSharp.Player.List {
          * notification thread runs. This would lead to unreliable data being sent with the
          * notification, or even a fatal JVM crash.
          */
-    /*	    private class VlcVideoPlayerCallback implements libvlc_callback_t {
+    /*    private class VlcVideoPlayerCallback implements libvlc_callback_t {
     
             public void callback(libvlc_event_t event, Pointer userData) {
                 Logger.trace("callback(event={},userData={})", event, userData);
@@ -383,8 +383,8 @@ namespace Caprica.VlcSharp.Player.List {
                 }
             }
         }
-    	 */
-    /*	    protected void finalize() throws Throwable {
+     */
+    /*    protected void finalize() throws Throwable {
             Logger.Debug("finalize()");
             Logger.Debug("Media list player has been garbage collected");
         }*/
