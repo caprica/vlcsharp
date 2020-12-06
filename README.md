@@ -19,6 +19,10 @@ C# implementation.
 News
 ----
 
+06/12/2020 Project status: this project was an experiment to bring the same vlcj API 
+to cross-platform C#, but it is clear now this project is not undergoing any further
+development. There are other LibVLC bindings for C# that you should look at instead.
+
 24/06/2012 New project.
 
 Right now this project should be considered experimental. It is possible to create
